@@ -1,0 +1,52 @@
+.calculator {
+    display: grid;
+    flex-wrap: wrap;
+    width: 400px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #77528A;
+    font-family: monospace;
+}
+
+.screen {
+    display: flex;
+    width: 400px;
+    height: 100px;
+    background-color: white;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.results-pane {
+    display: grid;
+    width: 290px;
+    height: 100%;
+    margin: 10px;
+}
+
+#equation {
+    width: max-content;
+    height: max-content;
+}
+
+#main-screen{
+    width: max-content;
+    height: max-content;
+    font-size: xx-large;
+}
+
+#delete {
+    float: right;
+}
+
+button {
+    width: 88px;
+    height: 88px;
+    margin: 3px;
+    background-color: #DCC9E6;
+    font-family: monospace;
+    font-size: xx-large;
+    border-style: solid;
+    border-radius: 100px;
+    border-color: gray;
+}
