@@ -18,7 +18,6 @@ function pressKey(e) {
         data = this.id;
     } else {
         data = e.key;
-        //document.querySelector(e.key)
     }
     console.log("DATA: " + data);
 
@@ -52,36 +51,45 @@ function pressKey(e) {
             }
             break;
         case "-":
-            if (isOperator(prevChar) && prevChar != '-') {
+            if (isOperator(prevChar) && prevChar != '-') { // negating term
                 currentTerm = data;
                 appendEquation(data);
                 clearMainScreen();
                 appendMainScreen(data);
+                console.log("A");
                 break;
             }
-            if (prevChar == '-') {
-                currentTerm = currentTerm.substr(0, currentTerm.length-1);
-                break;
-            }
-            else {
-                if (currentTerm != "") {
-                    equationArr.push(currentTerm);
+            if (prevChar == '-') { // negating a negative
+                if (currentTerm == '-'){
+                    currentTerm = currentTerm.substr(0, currentTerm.length-1);
+                    equation.textContent = equation.textContent.substr(0, equation.textContent.length-1);
+                    mainScreen.textContent = mainScreen.textContent.substr(0, mainScreen.textContent.length-1);
+                    console.log("B");
                 }
-                equationArr.push(data);
-                currentTerm = "0";
-                appendEquation(data);
+                else { // subtracting a negative
+                    equationArr.pop();
+                    equationArr.push('+');
+                    equation.textContent = equation.textContent.substr(0, equation.textContent.length-1);
+                    appendEquation('+');
+                    console.log("C");
+                }
                 break;
             }
-            
-            // if (isNumber(prevChar)) {
-            //     if (currentTerm.charAt(0) == "-") {
-            //         currentTerm = currentTerm.substr(1);
-            //     }
-            //     else {
-            //         currentTerm = "-" + currentTerm;
-            //     }
-            //     break;
-            // }
+            if (equationArr.length == 0 && currentTerm == '0') { // as negative sign for first number
+                currentTerm = data;
+                appendEquation(data);
+                appendMainScreen(data);
+                console.log("D");
+                break;
+            }
+            if (currentTerm != "") { // as operator
+                equationArr.push(currentTerm);
+            }
+            equationArr.push(data);
+            currentTerm = "0";
+            appendEquation(data);
+            console.log("E");
+            break;
         case "+":
         case "*":
         case "/":
@@ -135,6 +143,25 @@ function pressKey(e) {
                 currentTerm = "0";
                 appendEquation(data);
                 break;
+            }
+        case "Tab": // toggle sign
+            console.log(prevChar);
+            if (isNumber(prevChar)) {
+                console.log(currentTerm);
+                if (currentTerm.charAt(0) == '-') { // negate negative on this term
+                    currentTerm = currentTerm.substr(1);
+                    mainScreen.textContent = mainScreen.textContent.substr(1);
+                    minus = equation.textContent.lastIndexOf('-');
+                    equation.textContent = equation.textContent.substr(0,minus) + equation.textContent.substr(minus+1);
+                }
+                else { // add negative to this term
+                    currentTermLength = currentTerm.length;
+                    insertMinusAt = equation.textContent.length-currentTermLength;
+                    currentTerm = '-' + currentTerm;
+                    mainScreen.textContent = '-' + mainScreen.textContent;
+                    console.log("minus index" + insertMinusAt);
+                    equation.textContent = equation.textContent.substr(0, insertMinusAt) + '-' + equation.textContent.substr(insertMinusAt);
+                }
             }
         // case "Backspace":
         //     if (currentTerm != "0" || currentTerm != "") {
@@ -210,25 +237,21 @@ function evalBinOp(operator, term1, term2) {
     // console.log("num 1: " + num1);
     num2 = Number.parseFloat(term2);
     // console.log("num 2: " + num2);
-    if (operator == '+') {
-        return num1 + num2;
-    }
-    if (operator == '-') {
-        return num1 - num2;
-    }
-    if (operator == '*') {
-        return num1 * num2;
-    }
-    if (operator == '/') {
-        return num1 / num2;
-    }
-    if (operator == '^') {
-        return exponentiate(num1, num2);
+    switch (operator) {
+        case '+':
+            return (num1 + num2);
+        case '-':
+            return (num1 - num2);
+        case '*':
+            return (num1 * num2);
+        case '/':
+            return (num1 / num2);
+        case '^':
+            return num1 ** num2;
     }
 }
 
 function factorialize(num) {
-    // console.log("factorializing!!");
     console.log(num%1);
     if (num < 0) {
         alert ("error! cannot factorialize a negative value.");
@@ -240,14 +263,11 @@ function factorialize(num) {
     else if (num%1 == 0) {
         return num * factorialize(num-1);
     }
-    //alert ("error! cannot factorialize a decimal")
+    else {
+        alert("error! cannot factorialize a decimal");
+        return;
+    }
 }
-
-function exponentiate(base, exponent) {
-    return base**exponent;
-}
-
-//window.addEventListener('mousedown', pressKey);
 
 buttons = document.querySelectorAll('button');
 buttons.forEach(button => button.addEventListener('mouseup', pressKey));
