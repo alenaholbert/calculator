@@ -1,11 +1,17 @@
+body {
+    display: block;
+    text-align: center;
+    font-family: monospace;
+}
+
 .calculator {
+    margin-left: 15%;
     display: grid;
     flex-wrap: wrap;
     width: 400px;
     padding: 20px;
     border-radius: 10px;
     background-color: #77528A;
-    font-family: monospace;
 }
 
 .screen {
@@ -49,4 +55,22 @@ button {
     border-style: solid;
     border-radius: 100px;
     border-color: gray;
+}
+
+.container {
+    display: flex;
+}
+
+.keyboard-legend {
+    display: block;
+    width: 400px;
+    margin: 30px;
+    text-align: left;
+}
+
+ul {
+    padding: 15px;
+    list-style: none;
+    border-style: solid;
+    border-width: 2px;
 }

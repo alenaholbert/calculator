@@ -97,7 +97,11 @@ function pressKey(e) {
                 alert("cannot enter multiple operators in a row");
                 break;
             }
-            if (currentTerm != "") {
+            if (currentTerm == '0') {
+                equationArr.push(currentTerm);
+                appendEquation('0');
+            }
+            else if (currentTerm != "") {
                 equationArr.push(currentTerm);
             }
             equationArr.push(data);
@@ -163,17 +167,18 @@ function pressKey(e) {
                     equation.textContent = equation.textContent.substr(0, insertMinusAt) + '-' + equation.textContent.substr(insertMinusAt);
                 }
             }
-        // case "Backspace":
-        //     if (currentTerm != "0" || currentTerm != "") {
-        //         currentTerm = currentTerm.substr(0, currentTerm.length-1)
-        //     }
+        case "Backspace":
+            if (currentTerm != "0" && currentTerm != "" && isNumber(currentTerm)) {
+                currentTerm = currentTerm.substr(0, currentTerm.length-1)
+                mainScreen.textContent = mainScreen.textContent.substr(0, mainScreen.textContent.length-1);
+                equation.textContent = equation.textContent.substr(0, equation.textContent.length-1);
+            }
     }
     console.log("equation array: " + equationArr);
 }
 
 function isNumber(val) {
-    return (val == '0' || val == '1' || val == '2' || val == '3' || val == '4' || val == '5' || val == '6' || 
-        val == '7' || val == '8' || val == '9');
+    return !(val == '+' || val == '-' || val == '*' || val == '/' || val == '!' || val == '^' );
 }
 
 function isOperator(val) {
@@ -216,10 +221,6 @@ function evaluate() {
         term1 = equationArr[0];
         operator = equationArr[1];
         term2 = equationArr[2];
-        // console.log("term 1: " + term1);
-        // console.log("term 2: " + term2);
-        // console.log("operator: " + operator);
-        // console.log("---------------");
         result = evalBinOp(operator, term1, term2);
         console.log("result: " + result);
         equationArr = [result, ...equationArr.slice(3)];
@@ -229,14 +230,8 @@ function evaluate() {
 }
 
 function evalBinOp(operator, term1, term2) {
-
-    // console.log("term 1: " + term1);
-    // console.log("term 2: " + term2);
-
     num1 = Number.parseFloat(term1);
-    // console.log("num 1: " + num1);
     num2 = Number.parseFloat(term2);
-    // console.log("num 2: " + num2);
     switch (operator) {
         case '+':
             return (num1 + num2);
